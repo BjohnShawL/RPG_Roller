@@ -8,12 +8,16 @@ import azure.functions as func
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    def handle_single_roll(sides :int, modifier: int, neg: bool):
+    def handle_single_roll(sides :int, modifier: int = 0, neg: bool = False):
         result = randint(1,sides)
         modded = result + modifier if not neg else result - modifier
-        detail =f"{result} {'+' if not neg else '-'} {modifier}"
+        if modifier > 0 :
+            detail =f"{result} {'+' if not neg else '-'} {modifier }"
+        else:
+            detail = f"{result}"
         result_dict["sum"]+=modded
-        result_dict["detail"].append(detail)
+        if detail:
+            result_dict["detail"].append(detail)
 
     results_list=[]
     try:
